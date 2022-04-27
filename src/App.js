@@ -1,5 +1,8 @@
-import './App.css'
 import { useEffect, useState } from 'react'
+import './App.css'
+import WeatherBox from './component/WeatherBox'
+import WeatherButton from './component/WeatherButton'
+import 'bootstrap/dist/css/bootstrap.min.css'
 
 // 1. When app is started, it shows weather based on location
 // 2. City, C/F degrees, weather information
@@ -28,7 +31,14 @@ function App() {
     getCurrentLocation()
   }, [])
 
-  return <div>Test~~</div>
+  return (
+    <div>
+      <div className='container'>
+        <WeatherBox />
+        <WeatherButton />
+      </div>
+    </div>
+  )
 }
 
 export default App
