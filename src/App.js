@@ -12,8 +12,16 @@ function App() {
     navigator.geolocation.getCurrentPosition((position) => {
       let lat = position.coords.latitude
       let lon = position.coords.longitude
-      console.log('current location:', lat, lon)
+      getWeatherByCurrentLocation(lat, lon)
     })
+  }
+
+  // API 호출
+  const getWeatherByCurrentLocation = async (lat, lon) => {
+    let url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=70e579afc93f5ed072876a3cb0000ca1`
+    let response = await fetch(url)
+    let data = await response.json()
+    console.log('data: ', data)
   }
 
   useEffect(() => {
