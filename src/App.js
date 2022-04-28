@@ -12,6 +12,7 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 // 6. Loading spinner spins when data is loading
 function App() {
   const [weather, setWeather] = useState(null)
+  const cities = ['Paris', 'New York', 'Tokyo', 'Seoul']
 
   const getCurrentLocation = () => {
     navigator.geolocation.getCurrentPosition((position) => {
@@ -37,7 +38,7 @@ function App() {
     <div>
       <div className='container'>
         <WeatherBox weather={weather} />
-        <WeatherButton />
+        <WeatherButton cities={cities} />
       </div>
     </div>
   )
