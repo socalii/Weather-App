@@ -18,4 +18,9 @@ body {
   border-radius: 30px;
   padding: 50px;
   background-color: azure;
+  width: 350px;
+}
+
+.weather-button {
+  margin: 10px 5px;
 }
