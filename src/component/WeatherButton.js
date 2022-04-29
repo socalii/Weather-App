@@ -1,16 +1,27 @@
 import React from 'react'
-import { Button, Stack } from 'react-bootstrap'
+import { Button } from 'react-bootstrap'
+import Stack from 'react-bootstrap/Stack'
 
-const WeatherButton = ({ cities, setCity }) => {
+const WeatherButton = ({ cities, selectedCity, handleCityChange }) => {
   return (
-    <div className='weather-button'>
+    <div className='menu-container'>
       <Stack direction='horizontal' gap={2}>
-        <Button variant='warning'>Current Location</Button>
+        <Button
+          variant={`${
+            selectedCity == null ? 'outline-secondary' : 'secondary'
+          }`}
+          onClick={() => handleCityChange('current')}
+        >
+          Current Location
+        </Button>
 
-        {cities.map((item, index) => (
-          <Button variant='warning' key={index} onClick={() => setCity(item)}>
-            {' '}
-            {item}
+        {cities.map((city, index) => (
+          <Button
+            variant={`${selectedCity == null ? 'outline-warning' : 'warning'}`}
+            key={index}
+            onClick={() => handleCityChange(city)}
+          >
+            {city}
           </Button>
         ))}
       </Stack>

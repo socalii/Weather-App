@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react'
 import './App.css'
+import { Container } from 'react-bootstrap'
 import WeatherBox from './component/WeatherBox'
 import WeatherButton from './component/WeatherButton'
 import 'bootstrap/dist/css/bootstrap.min.css'
-import ClipLoader from 'react-spinners/ClipLoader'
+import { ClipLoader } from 'react-spinners/ClipLoader'
 
 // 1. When app is started, it shows weather based on location
 // 2. City, C/F degrees, weather information
@@ -11,11 +12,13 @@ import ClipLoader from 'react-spinners/ClipLoader'
 // 4. Button clicked, it shows the weather of the city
 // 5. Current button clicked, it shows weather of the current one.
 // 6. Loading spinner spins when data is loading
+
+const API_KEY = '70e579afc93f5ed072876a3cb0000ca1'
+const cities = ['Paris', 'New York', 'Tokyo', 'Seoul']
+
 function App() {
   const [weather, setWeather] = useState(null)
   const [city, setCity] = useState('')
-  const [loading, setLoading] = useState(false)
-  const cities = ['Paris', 'New York', 'Tokyo', 'Seoul']
 
   const getCurrentLocation = () => {
     navigator.geolocation.getCurrentPosition((position) => {
@@ -25,23 +28,26 @@ function App() {
     })
   }
 
-  // API 호출
   const getWeatherByCurrentLocation = async (lat, lon) => {
-    let url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=70e579afc93f5ed072876a3cb0000ca1&units=imperial`
-    setLoading(true)
-    let response = await fetch(url)
-    let data = await response.json()
+    let url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=imperial`
+    let res = await fetch(url)
+    let data = await res.json()
     setWeather(data)
-    setLoading(false)
   }
 
   const getWeatherByCity = async () => {
-    let url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=70e579afc93f5ed072876a3cb0000ca1&units=imperial`
-    setLoading(true)
-    let response = await fetch(url)
-    let data = await response.json()
+    let url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=imperial`
+    let res = await fetch(url)
+    let data = await res.json()
     setWeather(data)
-    setLoading(false)
+  }
+
+  const handleCityChange = (city) => {
+    if (city === 'current') {
+      setCity('')
+    } else {
+      setCity(city)
+    }
   }
 
   useEffect(() => {
@@ -54,16 +60,14 @@ function App() {
 
   return (
     <div>
-      {loading ? (
-        <div className='container'>
-          <ClipLoader color='#f88c6b' loading={loading} size={150} />
-        </div>
-      ) : (
-        <div className='container'>
-          <WeatherBox weather={weather} />
-          <WeatherButton cities={cities} setCity={setCity} />
-        </div>
-      )}
+      <div className='container'>
+        <WeatherBox weather={weather} />
+        <WeatherButton
+          cities={cities}
+          selectedCity={city}
+          handleCityChange={handleCityChange}
+        />
+      </div>
     </div>
   )
 }
