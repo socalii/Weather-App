@@ -12,6 +12,7 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 // 6. Loading spinner spins when data is loading
 function App() {
   const [weather, setWeather] = useState(null)
+  const [city, setCity] = useState('')
   const cities = ['Paris', 'New York', 'Tokyo', 'Seoul']
 
   const getCurrentLocation = () => {
@@ -30,15 +31,26 @@ function App() {
     setWeather(data)
   }
 
+  const getWeatherByCity = async () => {
+    let url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=70e579afc93f5ed072876a3cb0000ca1&units=imperial`
+    let response = await fetch(url)
+    let data = await response.json()
+    setWeather(data)
+  }
+
   useEffect(() => {
-    getCurrentLocation()
-  }, [])
+    if (city == '') {
+      getCurrentLocation()
+    } else {
+      getWeatherByCity()
+    }
+  }, [city])
 
   return (
     <div>
       <div className='container'>
         <WeatherBox weather={weather} />
-        <WeatherButton cities={cities} />
+        <WeatherButton cities={cities} setCity={setCity} />
       </div>
     </div>
   )
