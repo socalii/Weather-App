@@ -3,6 +3,7 @@ import './App.css'
 import WeatherBox from './component/WeatherBox'
 import WeatherButton from './component/WeatherButton'
 import 'bootstrap/dist/css/bootstrap.min.css'
+import ClipLoader from 'react-spinners/ClipLoader'
 
 // 1. When app is started, it shows weather based on location
 // 2. City, C/F degrees, weather information
@@ -13,6 +14,7 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 function App() {
   const [weather, setWeather] = useState(null)
   const [city, setCity] = useState('')
+  const [loading, setLoading] = useState(false)
   const cities = ['Paris', 'New York', 'Tokyo', 'Seoul']
 
   const getCurrentLocation = () => {
@@ -26,16 +28,20 @@ function App() {
   // API 호출
   const getWeatherByCurrentLocation = async (lat, lon) => {
     let url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=70e579afc93f5ed072876a3cb0000ca1&units=imperial`
+    setLoading(true)
     let response = await fetch(url)
     let data = await response.json()
     setWeather(data)
+    setLoading(false)
   }
 
   const getWeatherByCity = async () => {
     let url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=70e579afc93f5ed072876a3cb0000ca1&units=imperial`
+    setLoading(true)
     let response = await fetch(url)
     let data = await response.json()
     setWeather(data)
+    setLoading(false)
   }
 
   useEffect(() => {
@@ -48,10 +54,16 @@ function App() {
 
   return (
     <div>
-      <div className='container'>
-        <WeatherBox weather={weather} />
-        <WeatherButton cities={cities} setCity={setCity} />
-      </div>
+      {loading ? (
+        <div className='container'>
+          <ClipLoader color='#f88c6b' loading={loading} size={150} />
+        </div>
+      ) : (
+        <div className='container'>
+          <WeatherBox weather={weather} />
+          <WeatherButton cities={cities} setCity={setCity} />
+        </div>
+      )}
     </div>
   )
 }
